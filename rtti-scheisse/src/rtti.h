@@ -24,4 +24,17 @@
 #define DECLARE_TYPEINFO_CLASS(p_class, p_base)\
 	CREATE_TYPEINFO_CLASS(p_class, p_base)\
 	__DECLARE_TYPE_INFO_FUNCTIONS__(p_class)
-	
+
+#define __DECLARE_GETTER__(p_type, p_name, p_upper)\
+	const p_type& get##p_upper() const { return p_name; }
+
+#define __DECLARE_SETTER__(p_type, p_name, p_upper)\
+	void set##p_upper(const p_type &v) { p_name = v; }
+
+#define DECLARE_PROPERTY(p_type, p_name, p_upper)\
+	private:\
+		p_type p_name;\
+	public:\
+	__DECLARE_GETTER__(p_type, p_name, p_upper) \
+	__DECLARE_SETTER__(p_type, p_name, p_upper)\
+

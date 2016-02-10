@@ -7,6 +7,6 @@ namespace test {
 		DEFINE_CLASS(Person);
 	public:
 		
-		//DEFINE_PROPERTY(int, age, Age);
+		DECLARE_PROPERTY(int, age, Age);
 	};
 }
