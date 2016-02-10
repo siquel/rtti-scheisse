@@ -31,6 +31,13 @@ namespace rtti {
 	protected:
 	};
 
+
+	enum RTTIBindingFlags : int {
+		RTTI_BF_PUBLIC = 0x001,
+		RTTI_BF_PRIVATE = 0x002,
+		RTTI_BF_PROTECTED = 0x004
+	};
+
 	class RTTIFieldDescriptor {
 	protected:
 		int flags;
@@ -40,6 +47,7 @@ namespace rtti {
 		char const* name;
 		Class* declaringClass;
 	public:
+
 		RTTIFieldDescriptor(char* const name, int offset, size_t size, int flags, RTTIType* type, Class* clazz)
 			: name(name), offset(offset), size(size), flags(flags), type(type), declaringClass(clazz) {
 
