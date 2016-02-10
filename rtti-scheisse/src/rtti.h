@@ -3,27 +3,8 @@
 #define DEFINE_CLASS(p_class)\
 	public:\
 	using ThisClass = p_class;\
-	rtti::Class* p_class::getTypeinfo();\
-	static rtti::Class* p_class::getTypeinfoStatic();
+	rtti::Class* p_class::getTypeinfo();
 
-#define CREATE_TYPEINFO_BASECLASS(p_class)\
-	rtti::Class p_class##Typeinfo(#p_class, nullptr, sizeof(p_class));
-
-#define CREATE_TYPEINFO_CLASS(p_class, p_base)\
-	rtti::Class p_class##Typeinfo(#p_class, p_base::getTypeinfoStatic(), sizeof(p_class));
-
-
-#define __DECLARE_TYPE_INFO_FUNCTIONS__(p_class)\
-	rtti::Class* p_class##::getTypeinfo() { return &p_class##Typeinfo; }\
-	rtti::Class* p_class##::getTypeinfoStatic() { return &p_class##Typeinfo; }
-
-#define DECLARE_TYPEINFO_BASECLASS(p_class)\
-	CREATE_TYPEINFO_BASECLASS(p_class)\
-	__DECLARE_TYPE_INFO_FUNCTIONS__(p_class)
-
-#define DECLARE_TYPEINFO_CLASS(p_class, p_base)\
-	CREATE_TYPEINFO_CLASS(p_class, p_base)\
-	__DECLARE_TYPE_INFO_FUNCTIONS__(p_class)
 
 #define __DECLARE_GETTER__(p_type, p_name, p_upper)\
 	const p_type& get##p_upper() const { return p_name; }
@@ -40,7 +21,7 @@
 
 
 #define RTTI_FIELD(p_x, p_flags)\
-	rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, nullptr, nullptr)
+	rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, nullptr)
 
 
 #define RTTI_DESCRIBE_CLASS(p_class, p_fields)\
@@ -49,5 +30,11 @@
 
 
 #define RTTI_NO_FIELDS  (*(rtti::RTTIFieldDescriptor*)0)
-//#define RTTI_NO_METHODS (*(rtti::RTTIMethodDescriptor*)0)
-//rtti::RTTIMethodDescriptor* getRTTIMethods() { return &#p_class##Methods; }
+
+#define RTTI_REGISTER_CLASS(p_class)\
+	static rtti::RTTIFieldDescriptor* describeRTTIFieldsOf##p_class() {\
+		return p_class().getRTTIFields();\
+	}\
+	rtti::Class p_class##Typeinfo(#p_class, nullptr, sizeof(p_class), \
+					&describeRTTIFieldsOf##p_class); \
+	rtti::Class* p_class::getTypeinfo() { return &p_class##Typeinfo; }

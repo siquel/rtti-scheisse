@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 
-
-
 namespace rtti {
 	class RTTIFieldDescriptor;
+
+	using RTTIDescFieldsFunc = RTTIFieldDescriptor* (*)();
+
 	class Class {
 		friend class Object;
 		friend class RTTIFieldDescriptor;
@@ -15,9 +16,9 @@ namespace rtti {
 		RTTIFieldDescriptor* fields;
 		size_t fieldCount;
 	public:
-		Class(const char* name, Class* baseClass, size_t size, RTTIFieldDescriptor* fields, size_t fieldCount)
+		Class(const char* name, Class* baseClass, size_t size, RTTIDescFieldsFunc fieldFunc)
 			: name(name), baseClass(baseClass), size(size) {
-
+			fields = fieldFunc();
 		}
 	};
 
@@ -45,11 +46,10 @@ namespace rtti {
 		int offset;
 		size_t size;
 		char const* name;
-		Class* declaringClass;
 	public:
 
-		RTTIFieldDescriptor(char* const name, int offset, size_t size, int flags, RTTIType* type, Class* clazz)
-			: name(name), offset(offset), size(size), flags(flags), type(type), declaringClass(clazz) {
+		RTTIFieldDescriptor(char* const name, int offset, size_t size, int flags, RTTIType* type)
+			: name(name), offset(offset), size(size), flags(flags), type(type) {
 
 		}
 		
