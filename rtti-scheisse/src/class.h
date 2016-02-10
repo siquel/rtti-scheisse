@@ -29,10 +29,6 @@ namespace rtti {
 			return *this;
 		}
 
-		~RTTIFieldDescriptor() {
-			std::cout << "död\n";
-		}
-
 		void setValue(void* self, void* args) {
 			// get the address of field and copy the data to that position
 			std::memcpy((char*)self + offset, args, size);
