@@ -79,10 +79,12 @@
     <ClInclude Include="src\class.h" />
     <ClInclude Include="src\object.h" />
     <ClInclude Include="src\person.h" />
+    <ClInclude Include="src\rtti.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\object.cpp" />
+    <ClCompile Include="src\person.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

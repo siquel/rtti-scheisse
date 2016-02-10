@@ -1,4 +1,4 @@
-#include "class.h"
+#include "rtti.h"
 #include "object.h"
 
 namespace test {
@@ -6,8 +6,7 @@ namespace test {
 	private:
 		DEFINE_CLASS(Person);
 	public:
-		DECLARE_TYPEINFO_CLASS(Person, Object);
 		
-		DEFINE_PROPERTY(int, age, Age);
+		//DEFINE_PROPERTY(int, age, Age);
 	};
 }

@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\person.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\class.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\person.h">
+    <ClInclude Include="src\rtti.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -30,6 +33,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\person.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
