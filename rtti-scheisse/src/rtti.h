@@ -21,7 +21,7 @@
 
 
 #define RTTI_FIELD(p_x, p_flags)\
-	rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, nullptr)
+	*new rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, nullptr)
 
 
 #define RTTI_DESCRIBE_CLASS(p_class, p_fields)\
