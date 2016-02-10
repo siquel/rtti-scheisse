@@ -4,9 +4,9 @@
 namespace test {
 	class Person : public rtti::Object {
 	private:
-		DEFINE_CLASS(Person);
+		int age;
 	public:
-		
-		DECLARE_PROPERTY(int, age, Age);
+		RTTI_DESCRIBE_CLASS(Person,
+			(RTTI_FIELD(age, 0)));
 	};
 }

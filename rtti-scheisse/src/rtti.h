@@ -38,3 +38,16 @@
 	__DECLARE_GETTER__(p_type, p_name, p_upper) \
 	__DECLARE_SETTER__(p_type, p_name, p_upper)\
 
+
+#define RTTI_FIELD(p_x, p_flags)\
+	rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, nullptr, nullptr)
+
+
+#define RTTI_DESCRIBE_CLASS(p_class, p_fields)\
+	DEFINE_CLASS(p_class)\
+	rtti::RTTIFieldDescriptor* getRTTIFields() { return &p_fields; }\
+
+
+#define RTTI_NO_FIELDS  (*(rtti::RTTIFieldDescriptor*)0)
+//#define RTTI_NO_METHODS (*(rtti::RTTIMethodDescriptor*)0)
+//rtti::RTTIMethodDescriptor* getRTTIMethods() { return &#p_class##Methods; }

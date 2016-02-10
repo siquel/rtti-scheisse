@@ -2,5 +2,5 @@
 #include "object.h"
 #include "rtti.h"
 namespace test {
-	DECLARE_TYPEINFO_CLASS(Person, rtti::Object);
+	//DECLARE_TYPEINFO_CLASS(Person, rtti::Object);
 }
