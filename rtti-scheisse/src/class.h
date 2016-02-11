@@ -28,7 +28,7 @@ namespace rtti {
 		Class(const char* name, Class* baseClass, size_t size, RTTIDescFieldsFunc fieldFunc);
 		~Class();
 
-		RTTIFieldDescriptor* getFieldByName(const char* name) const;
+		RTTIFieldDescriptor* getFieldByName(const std::string& name) const;
 	};
 
 	class RTTIType {

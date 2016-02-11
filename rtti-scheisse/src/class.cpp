@@ -18,7 +18,10 @@ namespace rtti {
 		}
 	}
 
-	RTTIFieldDescriptor* Class::getFieldByName(const char* name) const {
+	RTTIFieldDescriptor* Class::getFieldByName(const std::string& name) const {
+		for (size_t i = 0; i < fieldCount; ++i) {
+			if (name == fields[i]->name) return fields[i];
+		}
 		return nullptr;
 	}
 

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 namespace rtti {
 
 	class RTTIType;
@@ -12,12 +12,12 @@ namespace rtti {
 		int offset;
 		size_t size;
 		size_t index;
-		char const* name;
+		std::string name;
 		RTTIFieldDescriptor* next;
 		RTTIFieldDescriptor** chain;
 	public:
 
-		RTTIFieldDescriptor(char* const name, int offset, size_t size, int flags, RTTIType* type);
+		RTTIFieldDescriptor(std::string name, int offset, size_t size, int flags, RTTIType* type);
 
 		// The macro uses comma separated list to define values
 		// this func is called when returning the list and is building the chain
@@ -26,6 +26,12 @@ namespace rtti {
 			chain = &field.next;
 			return *this;
 		}
+
+		const std::string& getName() const { return name; }
+
+		size_t getSize() const { return size; }
+
+		int getOffset() const { return offset; }
 
 		void setValue(void* self, void* args);
 		void getValue(void* self, void* to);

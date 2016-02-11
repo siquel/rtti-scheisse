@@ -2,7 +2,7 @@
 #include <cstring>
 
 namespace rtti {
-	RTTIFieldDescriptor::RTTIFieldDescriptor(char* const name, int offset, size_t size, int flags, RTTIType* type)
+	RTTIFieldDescriptor::RTTIFieldDescriptor(std::string name, int offset, size_t size, int flags, RTTIType* type)
 		: name(name), offset(offset), size(size), flags(flags), type(type), next(nullptr), chain(&next) {
 
 	}
