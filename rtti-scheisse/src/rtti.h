@@ -2,6 +2,17 @@
 #include "class.h"
 #include "descriptor.h"
 
+
+namespace rtti {
+
+	template <class T>
+	inline rtti::RTTIType* RTTITypeOf(T&) {
+
+	}
+	template <>
+	inline rtti::RTTIType* RTTITypeOf(int&) { return &RTTIType::IntType; }
+}
+
 #define DEFINE_CLASS(p_class)\
 	public:\
 	using ThisClass = p_class;\
@@ -23,7 +34,7 @@
 
 
 #define RTTI_FIELD(p_x, p_flags)\
-	*new rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, nullptr)
+	*new rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, rtti::RTTITypeOf(p_x))
 
 
 #define RTTI_DESCRIBE_CLASS(p_class, p_fields)\

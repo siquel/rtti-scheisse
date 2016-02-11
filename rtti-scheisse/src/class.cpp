@@ -2,6 +2,11 @@
 #include "descriptor.h"
 
 namespace rtti {
+
+	RTTIType RTTIType::VoidType(RTTI_VOID_TYPE);
+	RTTIType RTTIType::IntType(RTTI_INT_TYPE);
+	RTTIType RTTIType::UintType(RTTI_UINT_TYPE);
+
 	Class::Class(const char* name, Class* baseClass, size_t size, RTTIDescFieldsFunc fieldFunc)
 		: name(name), baseClass(baseClass), size(size) {
 		fieldList = (*fieldFunc)();

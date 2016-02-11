@@ -29,6 +29,7 @@ namespace rtti {
 		~Class();
 
 		RTTIFieldDescriptor* getFieldByName(const std::string& name) const;
+		void getConstructor(const RTTIBindingFlags bindings);
 	};
 
 	class RTTIType {
@@ -38,6 +39,16 @@ namespace rtti {
 		static RTTIType IntType;
 		static RTTIType UintType;
 
+		enum Type {
+			RTTI_INT_TYPE,
+			RTTI_CHAR_TYPE,
+			RTTI_UINT_TYPE,
+			RTTI_VOID_TYPE
+		}; 
+	
+		RTTIType(int tag) : tag(tag) {}
+	private:
+		int tag;
 	protected:
 	};
 }
