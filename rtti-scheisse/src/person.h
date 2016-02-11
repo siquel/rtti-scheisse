@@ -8,11 +8,16 @@ namespace test {
 		int age;
 		int gg;
 	public:
+		Person(int age);
+		// required
+		Person();
 		RTTI_DESCRIBE_CLASS(Person,
 			(
 			RTTI_FIELD(age, rtti::RTTIBindingFlags::RTTI_BF_PRIVATE),
 			RTTI_FIELD(gg, rtti::RTTIBindingFlags::RTTI_BF_PRIVATE)
-			)
+			),
+			(RTTI_CONSTRUCTOR(Person, (int), rtti::RTTIBindingFlags::RTTI_BF_PUBLIC))
 		);
+		
 	};
 }

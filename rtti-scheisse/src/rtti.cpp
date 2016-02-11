@@ -1,5 +1,6 @@
 #include "descriptor.h"
 #include <cstring>
+#include "person.h"
 
 namespace rtti {
 	RTTIFieldDescriptor::RTTIFieldDescriptor(std::string name, int offset, size_t size, int flags, RTTIType* type)
@@ -15,5 +16,12 @@ namespace rtti {
 	void RTTIFieldDescriptor::getValue(void* self, void* to) {
 		// copy the value to buffer
 		std::memcpy(to, (char*)self + offset, size);
+	}
+
+	RTTIFuncDescriptor::RTTIFuncDescriptor(std::string name, int flags, rtti::RTTIFunc* aaa) 
+		: name(name), flags(flags) {
+		test::Person::PersonFactory p;
+		
+		aaa->invoke(nullptr, &p, nullptr);
 	}
 }

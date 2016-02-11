@@ -5,6 +5,7 @@ namespace rtti {
 	
 
 	class RTTIFieldDescriptor;
+	class RTTIFuncDescriptor;
 
 	enum RTTIBindingFlags : int {
 		RTTI_BF_PUBLIC = 0x001,
@@ -13,7 +14,7 @@ namespace rtti {
 	};
 
 	using RTTIDescFieldsFunc = RTTIFieldDescriptor* (*)();
-
+	using RTTIDescCtorsFunc = RTTIFuncDescriptor* (*)();
 	class Class {
 		friend class Object;
 		friend class RTTIFieldDescriptor;
@@ -25,7 +26,7 @@ namespace rtti {
 		RTTIFieldDescriptor** fields;
 		size_t fieldCount;
 	public:
-		Class(const char* name, Class* baseClass, size_t size, RTTIDescFieldsFunc fieldFunc);
+		Class(const char* name, Class* baseClass, size_t size, RTTIDescFieldsFunc fieldFunc, RTTIDescCtorsFunc ctorFunc);
 		~Class();
 
 		RTTIFieldDescriptor* getFieldByName(const std::string& name) const;

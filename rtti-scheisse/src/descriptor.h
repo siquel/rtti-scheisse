@@ -2,8 +2,13 @@
 #include <string>
 namespace rtti {
 
-	class RTTIType;
+	class RTTIFunc {
+	public:
+		virtual void invoke(void* ret, void* obj, void* params[]) = 0;
+	};
 
+	class RTTIType;
+	
 	class RTTIFieldDescriptor {
 		friend class Class;
 	protected:
@@ -35,5 +40,17 @@ namespace rtti {
 
 		void setValue(void* self, void* args);
 		void getValue(void* self, void* to);
+	};
+
+	class RTTIFuncDescriptor {
+		friend class Class;
+	public:
+		RTTIFuncDescriptor(std::string name, int flags, rtti::RTTIFunc*);
+
+	protected:
+		std::string name;
+		int flags;
+		RTTIFuncDescriptor* next;
+		RTTIFuncDescriptor** chain;
 	};
 }

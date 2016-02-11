@@ -3,4 +3,17 @@
 #include "rtti.h"
 namespace test {
 	RTTI_REGISTER_CLASS(Person);
+
+	Person::Person(int age) 
+		: age(age) {
+
+	}
+
+	Person::Person() : age(0) {
+
+	}
+
+	Person* Person::PersonFactory::create(void* gg) {
+		return nullptr;
+	}
 }
