@@ -27,6 +27,9 @@
     <ClInclude Include="src\rtti.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\descriptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -36,6 +39,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\person.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\class.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rtti.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

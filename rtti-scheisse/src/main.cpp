@@ -12,5 +12,6 @@ int main() {
 	using namespace rtti;
 	Person p;
 	rtti::Class* typeinfo = p.getTypeinfo();
+	typeinfo->getFieldByName("asd");
 	return 0;
 }

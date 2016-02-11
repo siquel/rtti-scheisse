@@ -1,5 +1,7 @@
 #pragma once
 #include "class.h"
+#include "descriptor.h"
+
 #define DEFINE_CLASS(p_class)\
 	public:\
 	using ThisClass = p_class;\
