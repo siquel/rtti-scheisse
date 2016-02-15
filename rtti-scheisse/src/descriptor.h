@@ -32,6 +32,8 @@ namespace rtti {
 			return *this;
 		}
 
+		const RTTIType* getType() const { return type; }
+
 		const std::string& getName() const { return name; }
 
 		size_t getSize() const { return size; }

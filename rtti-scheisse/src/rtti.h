@@ -88,8 +88,8 @@ namespace rtti {
 	static rtti::RTTIFuncDescriptor* describeRTTIConstructorsOf##p_class() {\
 		return p_class().getRTTIConstructors();\
 	}\
-	rtti::Class p_class##Typeinfo(#p_class, nullptr, sizeof(p_class), \
+	static rtti::Class p_class##Typeinfo(#p_class, sizeof(p_class), \
 					&describeRTTIFieldsOf##p_class, \
 					&describeRTTIConstructorsOf##p_class); \
 	rtti::Class* p_class::getTypeinfo() { return &p_class##Typeinfo; }\
-	p_class##::p_class##Factory init##p_class##Factory(&p_class##Typeinfo);
+	static p_class##::p_class##Factory init##p_class##Factory(&p_class##Typeinfo);

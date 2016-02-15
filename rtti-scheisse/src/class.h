@@ -20,13 +20,12 @@ namespace rtti {
 		friend class RTTIFieldDescriptor;
 	protected:
 		std::string name;
-		Class* baseClass;
 		size_t size;
 		RTTIFieldDescriptor* fieldList;
 		RTTIFieldDescriptor** fields;
 		size_t fieldCount;
 	public:
-		Class(const char* name, Class* baseClass, size_t size, RTTIDescFieldsFunc fieldFunc, RTTIDescCtorsFunc ctorFunc);
+		Class(const char* name, size_t size, RTTIDescFieldsFunc fieldFunc, RTTIDescCtorsFunc ctorFunc);
 		~Class();
 
 		RTTIFieldDescriptor* getFieldByName(const std::string& name) const;
@@ -35,6 +34,8 @@ namespace rtti {
 		const std::string& getTypeName() const;
 
 		static Class* classForName(const std::string& name);
+
+		RTTIFieldDescriptor** getFields(size_t* count);
 
 		size_t getSize() const { return size; }
 	};
@@ -54,6 +55,8 @@ namespace rtti {
 		}; 
 	
 		RTTIType(int tag) : tag(tag) {}
+		
+		int getTag() const { return tag; }
 	private:
 		int tag;
 	protected:

@@ -4,7 +4,7 @@
 
 namespace test {
 	class Person : public rtti::Object {
-	private:
+	public:
 		int age;
 		int gg;
 	public:

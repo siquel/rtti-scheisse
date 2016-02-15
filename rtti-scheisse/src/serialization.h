@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdlib>
+#include "class.h"
 namespace rtti {
 
 	enum class SeekPosition : size_t {
@@ -62,4 +63,32 @@ namespace rtti {
 			return elements;
 		}
 	};
+
+	template <class T>
+	void generateSerializable(const std::string& className, const T* self, MemoryStream& to) {
+		Class* clazz = Class::classForName(className);
+		assert(clazz != nullptr);
+		assert(self != nullptr);
+		size_t count;
+		rtti::RTTIFieldDescriptor** fields = clazz->getFields(&count);
+		assert(fields != nullptr);
+		size_t n = className.size();
+		to.write((unsigned char*)&n, sizeof(size_t));
+		to.write((const unsigned char*)className.c_str(), className.size());
+
+		for (size_t i = 0; i < count; ++i) {
+			RTTIFieldDescriptor* field = fields[i];
+			const std::string& name = field->getName();
+			n = name.size();
+			to.write((unsigned char*)&n, sizeof(size_t));
+			to.write((const unsigned char*)name.c_str(), name.size());
+			void* buffer[1024] = { 0 };
+
+			auto type = field->getType();
+			int tag = type->getTag();
+			to.write((unsigned char*)&tag, sizeof(int));
+			field->getValue((void*)self, buffer);
+			to.write((unsigned char*)buffer, field->getSize());
+		}
+	}
 }
