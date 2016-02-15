@@ -1,6 +1,6 @@
 #include "class.h"
 #include "descriptor.h"
-
+#include "class_repo.h"
 namespace rtti {
 
 	RTTIType RTTIType::VoidType(RTTI_VOID_TYPE);
@@ -29,6 +29,14 @@ namespace rtti {
 			if (name == fields[i]->name) return fields[i];
 		}
 		return nullptr;
+	}
+
+	Class* Class::classForName(const std::string& name) {
+		return ClassRepository::getInstance().classForName(name);
+	}
+
+	const std::string& Class::getTypeName() const {
+		return name;
 	}
 
 	Class::~Class() {

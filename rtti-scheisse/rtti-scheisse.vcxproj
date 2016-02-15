@@ -77,13 +77,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\class.h" />
+    <ClInclude Include="src\class_repo.h" />
     <ClInclude Include="src\descriptor.h" />
     <ClInclude Include="src\object.h" />
     <ClInclude Include="src\person.h" />
     <ClInclude Include="src\rtti.h" />
+    <ClInclude Include="src\serialization.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\class.cpp" />
+    <ClCompile Include="src\class_repo.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\person.cpp" />

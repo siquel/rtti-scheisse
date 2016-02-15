@@ -31,6 +31,12 @@ namespace rtti {
 
 		RTTIFieldDescriptor* getFieldByName(const std::string& name) const;
 		void getConstructor(const RTTIBindingFlags bindings);
+
+		const std::string& getTypeName() const;
+
+		static Class* classForName(const std::string& name);
+
+		size_t getSize() const { return size; }
 	};
 
 	class RTTIType {

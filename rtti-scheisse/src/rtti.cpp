@@ -20,8 +20,8 @@ namespace rtti {
 
 	RTTIFuncDescriptor::RTTIFuncDescriptor(std::string name, int flags, rtti::RTTIFunc* aaa) 
 		: name(name), flags(flags) {
-		test::Person::PersonFactory p;
 		
-		aaa->invoke(nullptr, &p, nullptr);
+		
+		aaa->invoke(nullptr, nullptr, nullptr);
 	}
 }

@@ -9,6 +9,7 @@ namespace rtti {
 		while (parent != nullptr) {
 			if (parent == base)
 				return true;
+			parent = parent->baseClass;
 		}
 		return false;
 	}

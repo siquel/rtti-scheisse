@@ -1,6 +1,7 @@
 #pragma once
 #include "class.h"
 #include "descriptor.h"
+#include "class_repo.h"
 #include <cassert>
 
 namespace rtti {
@@ -67,8 +68,9 @@ namespace rtti {
 #define CREATE_CLASSFACTORY(p_class)\
 	class p_class##Factory {\
 	public:\
+		p_class##Factory(rtti::Class* v) { rtti::ClassRepository::getInstance().addClass(v); }\
 		p_class##* create(void*);\
-	};
+	};\
 
 #define RTTI_DESCRIBE_CLASS(p_class, p_fields, p_constructors)\
 	DEFINE_CLASS(p_class)\
@@ -89,4 +91,5 @@ namespace rtti {
 	rtti::Class p_class##Typeinfo(#p_class, nullptr, sizeof(p_class), \
 					&describeRTTIFieldsOf##p_class, \
 					&describeRTTIConstructorsOf##p_class); \
-	rtti::Class* p_class::getTypeinfo() { return &p_class##Typeinfo; }
+	rtti::Class* p_class::getTypeinfo() { return &p_class##Typeinfo; }\
+	p_class##::p_class##Factory init##p_class##Factory(&p_class##Typeinfo);
