@@ -19,5 +19,8 @@ int main() {
 	assert(typeinfo == Class::classForName("Person"));
 	RTTIFieldDescriptor* desc = typeinfo->getFieldByName("age");
 	generateSerializable("Person", &p, stream);
+
+	stream.seek(SeekPosition::Begin, 0);
+	void* ptr = deserialize(stream);
 	return 0;
 }
