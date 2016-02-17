@@ -8,8 +8,17 @@ namespace rtti {
 
 	template <class T>
 	inline rtti::RTTIType* RTTITypeOf(T&) {
-
+		return &T::RTTITypeInfo;
 	}
+
+	template <class T>
+	inline RTTIType* RTTITypeOfPtr(T*) { 
+		return new rtti::RTTIPtrType(&T::RTTITypeInfo); 
+	}
+
+	template <>
+	inline RTTIType* RTTITypeOfPtr(int*){ return &RTTIType::IntType; }
+
 	template <>
 	inline rtti::RTTIType* RTTITypeOf(int&) { return &RTTIType::IntType; }
 
@@ -42,7 +51,7 @@ namespace rtti {
 #define DEFINE_CLASS(p_class)\
 	public:\
 	using ThisClass = p_class;\
-	rtti::Class* p_class::getTypeinfo();
+	rtti::Class* p_class::getTypeinfo();\
 
 
 #define __DECLARE_GETTER__(p_type, p_name, p_upper)\
@@ -62,11 +71,15 @@ namespace rtti {
 #define RTTI_FIELD(p_x, p_flags)\
 	*new rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, rtti::RTTITypeOf(p_x))
 
+#define RTTI_POINTER(p_x, p_flags)\
+	*new rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, rtti::RTTITypeOfPtr(p_x))
+
 /*#define RTTI_CONSTRUCTOR(p_class, p_signature, p_flags) \
 	*new rtti::RTTIFuncDescriptor(#p_class #p_signature, p_flags, rtti::RTTIFuncTypeOf((p_class*(p_class##Factory::*)p_signature)&p_class##Factory::create))*/
 
 #define RTTI_DESCRIBE_CLASS(p_class, p_fields)\
 	DEFINE_CLASS(p_class)\
+	static rtti::Class RTTITypeInfo;\
 	rtti::RTTIFieldDescriptor* getRTTIFields() { return &p_fields; }\
 	
 
@@ -74,12 +87,12 @@ namespace rtti {
 #define RTTI_NO_FIELDS  (*(rtti::RTTIFieldDescriptor*)0)
 
 #define RTTI_REGISTER_CLASS(p_class)\
-	static void* createInstance() { return new p_class; }\
+	static void* createInstanceOf##p_class() { return new p_class; }\
 	static rtti::RTTIFieldDescriptor* describeRTTIFieldsOf##p_class() {\
 		return p_class().getRTTIFields();\
 	}\
-	static rtti::Class p_class##Typeinfo(#p_class, sizeof(p_class), \
+	rtti::Class p_class::RTTITypeInfo(#p_class, sizeof(p_class), \
 					&describeRTTIFieldsOf##p_class, \
-					&createInstance); \
-	rtti::Class* p_class::getTypeinfo() { return &p_class##Typeinfo; }\
+					&createInstanceOf##p_class); \
+	rtti::Class* p_class::getTypeinfo() { return &RTTITypeInfo; }\
 	//static p_class##::p_class##Factory init##p_class##Factory(&p_class##Typeinfo);

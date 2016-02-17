@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "class.h"
 #include "activator.h"
+
 namespace rtti {
 	using uint32 = unsigned int;
 	using uint8 = unsigned char;
@@ -261,14 +262,15 @@ namespace rtti {
 	}
 	};
 
-	template <class T>
-	void generateSerializable(const std::string& className, const T* self, MemoryStream& to) {
+	void serializeClass(const std::string& className, void* self, MemoryStream& to) {
 		Class* clazz = Class::classForName(className);
 		assert(clazz != nullptr);
 		assert(self != nullptr);
+
 		size_t count;
 		rtti::RTTIFieldDescriptor** fields = clazz->getFields(&count);
 		assert(fields != nullptr);
+
 		BinaryWriter writer(&to);
 		writer.write(className);
 		writer.write7BitEncodedInt(count);
@@ -280,10 +282,25 @@ namespace rtti {
 
 			auto type = field->getType();
 			int tag = type->getTag();
-			to.write((unsigned char*)&tag, sizeof(int));
-			field->getValue((void*)self, buffer);
-			to.write((unsigned char*)buffer, field->getSize());
+			writer.write(tag);
+			if (tag == RTTIType::RTTI_CLASS) {
+				const rtti::Class* memberClass = static_cast<const Class*>(type);
+				void* ptr = (reinterpret_cast<char*>(self) + field->getOffset());
+				serializeClass(memberClass->getTypeName(), ptr, to);
+			}
+			else {
+				field->getValue((void*)self, buffer);
+				to.write((unsigned char*)buffer, field->getSize());
+			}
 		}
+	}
+
+	template <class T>
+	void generateSerializable(const std::string& className, const T* self, MemoryStream& to) {
+
+		serializeClass(className, (void*)self, to);
+		
+
 	}
 
 	template <class T>
@@ -298,11 +315,25 @@ namespace rtti {
 			std::string fieldName = reader.readString();
 			RTTIFieldDescriptor* fd = clazz->getFieldByName(fieldName);
 			int type = reader.readInt32();
-			switch (type) {
-			case RTTIType::RTTI_INT_TYPE:
+			if (type == RTTIType::RTTI_INT_TYPE) {
 				int data = reader.readInt32();
 				fd->setValue(instance, &data);
-				break;
+			}
+			else if (type == RTTIType::RTTI_CLASS) {
+				std::string clazzname = reader.readString();
+				Class* cls = Class::classForName(clazzname);
+				uint64 count = reader.read7BitEncodedInt();
+				for (auto  j= 0; j < count; ++j) {
+					std::string fieldName = reader.readString();
+					
+					void* memberInstance = reinterpret_cast<char*>(instance)+fd->getOffset();
+					fd = cls->getFieldByName(fieldName);
+					int type = reader.readInt32();
+					if (type == RTTIType::RTTI_INT_TYPE) {
+						int data = reader.readInt32();
+						fd->setValue(memberInstance, &data);
+					}
+				}
 			}
 		}
 		return static_cast<T*>(instance);

@@ -12,10 +12,42 @@ namespace rtti {
 		RTTI_BF_PRIVATE = 0x002,
 		RTTI_BF_PROTECTED = 0x004
 	};
+	class RTTIType {
+	public:
+		static RTTIType VoidType;
+		static RTTIType CharType;
+		static RTTIType IntType;
+		static RTTIType UintType;
+
+		enum Type {
+			RTTI_INT_TYPE,
+			RTTI_CHAR_TYPE,
+			RTTI_UINT_TYPE,
+			RTTI_VOID_TYPE,
+			RTTI_CLASS,
+			RTTI_POINTER
+		};
+
+		RTTIType(int tag) : tag(tag) {}
+
+		int getTag() const { return tag; }
+	private:
+		int tag;
+	protected:
+	};
+
+	class RTTIPtrType : public RTTIType {
+	protected:
+		RTTIType* type;
+	public:
+		const RTTIType* getType() const { return type; }
+		RTTIPtrType(RTTIType* type) 
+			: RTTIType(RTTI_POINTER), type(type) {}
+	};
 
 	using RTTIDescFieldsFunc = RTTIFieldDescriptor* (*)();
 	using RTTICreateInstanceFunc = void* (*)();
-	class Class {
+	class Class : public RTTIType {
 		friend class Activator;
 		friend class Object;
 		friend class RTTIFieldDescriptor;
@@ -41,26 +73,6 @@ namespace rtti {
 		size_t getSize() const { return size; }
 	};
 
-	class RTTIType {
-	public:
-		static RTTIType VoidType;
-		static RTTIType CharType;
-		static RTTIType IntType;
-		static RTTIType UintType;
 
-		enum Type {
-			RTTI_INT_TYPE,
-			RTTI_CHAR_TYPE,
-			RTTI_UINT_TYPE,
-			RTTI_VOID_TYPE
-		}; 
-	
-		RTTIType(int tag) : tag(tag) {}
-		
-		int getTag() const { return tag; }
-	private:
-		int tag;
-	protected:
-	};
 }
 
