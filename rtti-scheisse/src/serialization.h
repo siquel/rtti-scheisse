@@ -5,7 +5,8 @@ namespace rtti {
 	using uint32 = unsigned int;
 	using uint8 = unsigned char;
 	using uint16 = unsigned short;
-	using uint64 = unsigned long;
+	using int64 = long long;
+	using uint64 = unsigned long long;
 	enum class SeekPosition : size_t {
 		/// From begin
 		Begin = 0,
@@ -95,8 +96,8 @@ namespace rtti {
 			stream->write((unsigned char*)&value, sizeof(unsigned int));
 		}
 
-		void write(unsigned long value) {
-			stream->write((unsigned char*)&value, sizeof(unsigned long));
+		void write(uint64 value) {
+			stream->write((unsigned char*)&value, sizeof(uint64));
 		}
 
 		void write(char value) {
@@ -111,8 +112,8 @@ namespace rtti {
 			stream->write((unsigned char*)&value, sizeof(int));
 		}
 
-		void write(long value) {
-			stream->write((unsigned char*)&value, sizeof(long));
+		void write(int64 value) {
+			stream->write((unsigned char*)&value, sizeof(int64));
 		}
 
 		void write(float value) {
@@ -128,14 +129,14 @@ namespace rtti {
 			stream->write((unsigned char*)value.c_str(), sizeof(char) * value.size());
 		}
 
-		void write7BitEncodedInt(unsigned long value) {
+		void write7BitEncodedInt(unsigned long long value) {
 
 			int index = 3;
 			bool reached = false;
-			unsigned long mask = 0x7Fu << (index * 7);
+			uint64 mask = 0x7Fu << (index * 7);
 
 			while (index >= 0) {
-				unsigned long val = (mask & value);
+				uint64 val = (mask & value);
 
 				if (val > 0 || reached) {
 
@@ -156,9 +157,9 @@ namespace rtti {
 			}
 
 			if (!reached && index < 0) {
-				unsigned char a = 0;
+				uint8 a = 0;
 
-				stream->write(&a, sizeof(char));
+				stream->write(&a, sizeof(uint8));
 			}
 		}
 	};
@@ -287,7 +288,7 @@ namespace rtti {
 	void* deserialize(MemoryStream& from) {
 		BinaryReader reader(&from);
 		std::string className = reader.readString();
-		size_t count = reader.read7BitEncodedInt();
+		uint64 count = reader.read7BitEncodedInt();
 		//className.resize(std::atoi())
 		return nullptr;
 	}
