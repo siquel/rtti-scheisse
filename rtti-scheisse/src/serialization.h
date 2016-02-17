@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdlib>
 #include "class.h"
+#include "activator.h"
 namespace rtti {
 	using uint32 = unsigned int;
 	using uint8 = unsigned char;
@@ -285,11 +286,25 @@ namespace rtti {
 		}
 	}
 
-	void* deserialize(MemoryStream& from) {
+	template <class T>
+	T* deserialize(MemoryStream& from) {
 		BinaryReader reader(&from);
 		std::string className = reader.readString();
-		uint64 count = reader.read7BitEncodedInt();
-		//className.resize(std::atoi())
-		return nullptr;
+		Class* clazz = Class::classForName(className);
+
+		void* instance = Activator::createInstance(className);
+		uint64 fieldCount = reader.read7BitEncodedInt();
+		for (auto i = 0; i < fieldCount; ++i) {
+			std::string fieldName = reader.readString();
+			RTTIFieldDescriptor* fd = clazz->getFieldByName(fieldName);
+			int type = reader.readInt32();
+			switch (type) {
+			case RTTIType::RTTI_INT_TYPE:
+				int data = reader.readInt32();
+				fd->setValue(instance, &data);
+				break;
+			}
+		}
+		return static_cast<T*>(instance);
 	}
 }

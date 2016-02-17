@@ -14,8 +14,9 @@ namespace rtti {
 	};
 
 	using RTTIDescFieldsFunc = RTTIFieldDescriptor* (*)();
-	using RTTIDescCtorsFunc = RTTIFuncDescriptor* (*)();
+	using RTTICreateInstanceFunc = void* (*)();
 	class Class {
+		friend class Activator;
 		friend class Object;
 		friend class RTTIFieldDescriptor;
 	protected:
@@ -24,12 +25,12 @@ namespace rtti {
 		RTTIFieldDescriptor* fieldList;
 		RTTIFieldDescriptor** fields;
 		size_t fieldCount;
+		RTTICreateInstanceFunc instanceFunc;
 	public:
-		Class(const char* name, size_t size, RTTIDescFieldsFunc fieldFunc, RTTIDescCtorsFunc ctorFunc);
+		Class(const char* name, size_t size, RTTIDescFieldsFunc fieldFunc, RTTICreateInstanceFunc ctorFunc);
 		~Class();
 
 		RTTIFieldDescriptor* getFieldByName(const std::string& name) const;
-		void getConstructor(const RTTIBindingFlags bindings);
 
 		const std::string& getTypeName() const;
 

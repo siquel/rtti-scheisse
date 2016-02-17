@@ -21,6 +21,6 @@ int main() {
 	generateSerializable("Person", &p, stream);
 
 	stream.seek(SeekPosition::Begin, 0);
-	void* ptr = deserialize(stream);
+	Person* ptr = deserialize<Person>(stream);
 	return 0;
 }

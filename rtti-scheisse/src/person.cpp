@@ -13,7 +13,4 @@ namespace test {
 
 	}
 
-	Person* Person::PersonFactory::create(void* gg) {
-		return nullptr;
-	}
 }

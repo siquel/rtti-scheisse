@@ -15,8 +15,7 @@ namespace test {
 			(
 			RTTI_FIELD(age, rtti::RTTIBindingFlags::RTTI_BF_PRIVATE),
 			RTTI_FIELD(gg, rtti::RTTIBindingFlags::RTTI_BF_PRIVATE)
-			),
-			(RTTI_CONSTRUCTOR(Person, (int), rtti::RTTIBindingFlags::RTTI_BF_PUBLIC))
+			)
 		);
 		
 	};

@@ -62,34 +62,24 @@ namespace rtti {
 #define RTTI_FIELD(p_x, p_flags)\
 	*new rtti::RTTIFieldDescriptor(#p_x, (char*)&p_x-(char*)this, sizeof(p_x), p_flags, rtti::RTTITypeOf(p_x))
 
-#define RTTI_CONSTRUCTOR(p_class, p_signature, p_flags) \
-	*new rtti::RTTIFuncDescriptor(#p_class #p_signature, p_flags, rtti::RTTIFuncTypeOf((p_class*(p_class##Factory::*)p_signature)&p_class##Factory::create))
+/*#define RTTI_CONSTRUCTOR(p_class, p_signature, p_flags) \
+	*new rtti::RTTIFuncDescriptor(#p_class #p_signature, p_flags, rtti::RTTIFuncTypeOf((p_class*(p_class##Factory::*)p_signature)&p_class##Factory::create))*/
 
-#define CREATE_CLASSFACTORY(p_class)\
-	class p_class##Factory {\
-	public:\
-		p_class##Factory(rtti::Class* v) { rtti::ClassRepository::getInstance().addClass(v); }\
-		p_class##* create(void*);\
-	};\
-
-#define RTTI_DESCRIBE_CLASS(p_class, p_fields, p_constructors)\
+#define RTTI_DESCRIBE_CLASS(p_class, p_fields)\
 	DEFINE_CLASS(p_class)\
-	CREATE_CLASSFACTORY(p_class)\
 	rtti::RTTIFieldDescriptor* getRTTIFields() { return &p_fields; }\
-	rtti::RTTIFuncDescriptor* getRTTIConstructors() { return &p_constructors; }
+	
 
 
 #define RTTI_NO_FIELDS  (*(rtti::RTTIFieldDescriptor*)0)
 
 #define RTTI_REGISTER_CLASS(p_class)\
+	static void* createInstance() { return new p_class; }\
 	static rtti::RTTIFieldDescriptor* describeRTTIFieldsOf##p_class() {\
 		return p_class().getRTTIFields();\
 	}\
-	static rtti::RTTIFuncDescriptor* describeRTTIConstructorsOf##p_class() {\
-		return p_class().getRTTIConstructors();\
-	}\
 	static rtti::Class p_class##Typeinfo(#p_class, sizeof(p_class), \
 					&describeRTTIFieldsOf##p_class, \
-					&describeRTTIConstructorsOf##p_class); \
+					&createInstance); \
 	rtti::Class* p_class::getTypeinfo() { return &p_class##Typeinfo; }\
-	static p_class##::p_class##Factory init##p_class##Factory(&p_class##Typeinfo);
+	//static p_class##::p_class##Factory init##p_class##Factory(&p_class##Typeinfo);

@@ -7,8 +7,8 @@ namespace rtti {
 	RTTIType RTTIType::IntType(RTTI_INT_TYPE);
 	RTTIType RTTIType::UintType(RTTI_UINT_TYPE);
 
-	Class::Class(const char* name, size_t size, RTTIDescFieldsFunc fieldFunc, RTTIDescCtorsFunc ctorFunc)
-		: name(name), size(size) {
+	Class::Class(const char* name, size_t size, RTTIDescFieldsFunc fieldFunc, RTTICreateInstanceFunc instanceFunc)
+		: name(name), size(size), instanceFunc(instanceFunc) {
 		fieldList = (*fieldFunc)();
 		size_t n = 0;
 		RTTIFieldDescriptor* fd = nullptr;
@@ -21,7 +21,7 @@ namespace rtti {
 		for (fd = fieldList, n = 0; fd != nullptr; fd = fd->next) {
 			fields[n++] = fd;
 		}
-		RTTIFuncDescriptor* desc = (*ctorFunc)();
+		rtti::ClassRepository::getInstance().addClass(this);
 	}
 
 	RTTIFieldDescriptor** Class::getFields(size_t* count) {
